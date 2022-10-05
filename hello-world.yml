@@ -1,0 +1,34 @@
+jobs:
+- name: hello-world-job
+  plan:
+  - get: example-lein-project
+    trigger: true
+  - task: hello-world-task
+    config:
+      caches:
+      - path: .m2/repository
+      - path: .
+      platform: linux
+      image_resource:
+        type: registry-image
+        source:
+          repository: clojure
+      inputs:
+      - name: example-lein-project
+      run:
+        args:
+        - -c
+        - |
+          du -hs ~/.m2/repository # prints always same number after re-trigger
+          cd example-lein-project
+          lein deps
+          cd ..
+          du -hs ~/.m2/repository
+        path: /bin/sh
+
+resources:
+- icon: github
+  name: example-lein-project
+  source:
+    uri: https://github.com/francesco-losciale/ring-todo-list.git
+  type: git
