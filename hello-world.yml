@@ -7,7 +7,6 @@ jobs:
     config:
       caches:
       - path: .m2/repository
-      - path: .
       platform: linux
       image_resource:
         type: registry-image
